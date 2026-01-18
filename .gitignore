@@ -212,3 +212,5 @@ frontend/dist/
 frontend/node_modules/
 *.json
 !frontend/*.json
+frontend/coverage/
+.beads/

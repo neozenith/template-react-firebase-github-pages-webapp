@@ -5,7 +5,9 @@ import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 
 // Use basename only for production (GitHub Pages)
-const basename = import.meta.env.PROD ? '/template-react-firebase-github-pages-webapp' : '/';
+const basename = import.meta.env.PROD
+  ? '/template-react-firebase-github-pages-webapp'
+  : '/';
 
 function App() {
   return (

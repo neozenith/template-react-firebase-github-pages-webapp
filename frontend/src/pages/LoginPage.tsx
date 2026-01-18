@@ -16,16 +16,14 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      void navigate('/dashboard');
     }
   }, [user, navigate]);
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
+  const handleGoogleSignIn = () => {
+    void signInWithGoogle().catch((error: unknown) => {
       console.error('Failed to sign in:', error);
-    }
+    });
   };
 
   return (

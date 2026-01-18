@@ -4,7 +4,7 @@ import type { User } from 'firebase/auth';
 import {
   signInWithPopup,
   signOut as firebaseSignOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 
@@ -49,14 +49,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             email: user.email,
             uid: user.uid,
             displayName: user.displayName,
-            providerId: user.providerData[0]?.providerId
+            providerId: user.providerData[0]?.providerId,
           });
         } else {
           console.log('⚪ No user authenticated');
           // Check if there's an error in localStorage
           try {
             const keys = Object.keys(localStorage);
-            const firebaseKeys = keys.filter(k => k.includes('firebase'));
+            const firebaseKeys = keys.filter((k) => k.includes('firebase'));
             console.log('🔍 Firebase localStorage keys:', firebaseKeys);
           } catch (e) {
             console.error('❌ Error checking localStorage:', e);

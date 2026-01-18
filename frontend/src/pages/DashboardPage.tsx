@@ -11,12 +11,10 @@ import {
 export const DashboardPage = () => {
   const { user, signOut } = useAuth();
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error) {
+  const handleSignOut = () => {
+    void signOut().catch((error: unknown) => {
       console.error('Failed to sign out:', error);
-    }
+    });
   };
 
   return (
