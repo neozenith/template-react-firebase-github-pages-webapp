@@ -52,24 +52,28 @@ frontend/src/
 
 ---
 
-## Next Up (v0.3.0) - Playwright E2E Testing with SSO
+## Completed (v0.3.0) - Playwright E2E Testing with SSO
 
 ### Goal
 Set up Playwright for E2E testing using real Google SSO with manual auth state capture.
 
 **Spec:** [`specs/playwright-sso-testing.md`](specs/playwright-sso-testing.md)
 
+### Implementation Notes
+
+Google blocks automated browsers from OAuth sign-in ("This browser or app may not be secure"). Solution: use real Chrome with CDP (Chrome DevTools Protocol) to capture auth state, then inject it into Playwright tests.
+
 ### Tasks
 
-- [ ] **Install and configure Playwright** - Test runner, browser config
-- [ ] **Auth capture script** - `make e2e-auth` for manual Google sign-in
-- [ ] **Test fixtures** - Auth state checking, unauthenticated test support
-- [ ] **E2E test suite** - 9 tests covering auth flows and navigation
-- [ ] **Makefile targets** - `make e2e`, `make e2e-auth`, `make e2e-ui`
+- [x] **Install and configure Playwright** - Test runner, browser config, tsconfig.e2e.json
+- [x] **Auth capture via CDP** - `make e2e-chrome` + `make e2e-capture` workflow
+- [x] **Test fixtures** - Auto-inject Firebase auth via `addInitScript()`, unauthenticated test support
+- [x] **E2E test suite** - 9 tests covering auth flows and navigation
+- [x] **Makefile targets** - `make e2e`, `make e2e-chrome`, `make e2e-capture`, `make e2e-ui`, etc.
 
 ---
 
-## Up Next (v0.4.0) - G Suite API Access
+## Next Up (v0.4.0) - G Suite API Access
 
 ### Goal
 Extend Google OAuth to request Sheets and Calendar permissions, enabling the app to access user's G Suite data.
@@ -116,3 +120,4 @@ Extend Google OAuth to request Sheets and Calendar permissions, enabling the app
 |---------|------|-------------|
 | 0.1.0 | 2025-12-29 | Initial MVP - Working Google SSO |
 | 0.2.0 | 2026-01-18 | DX improvements - Vitest, ESLint/Prettier, strict TypeScript |
+| 0.3.0 | 2026-01-20 | Playwright E2E testing with real Google SSO via CDP auth capture |
