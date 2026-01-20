@@ -175,12 +175,71 @@ To manually trigger a deployment:
 
 ## Available Commands
 
+### Development
 - `make install` - Install all dependencies
 - `make dev` - Start development server
 - `make build` - Build for production
 - `make preview` - Preview production build
 - `make clean` - Clean build artifacts and dependencies
-- `make test` - Run tests (not yet implemented)
+
+### Testing
+- `make test` - Run unit tests
+- `make e2e` - Run E2E tests (requires auth capture first)
+- `make e2e-ui` - Run E2E tests with Playwright UI
+- `make e2e-headed` - Run E2E tests with visible browser
+- `make e2e-debug` - Run E2E tests in debug mode
+
+## E2E Testing
+
+This project uses Playwright for E2E testing with **real Google OAuth authentication**.
+
+### Why Real Chrome?
+
+Google blocks automated browsers from OAuth sign-in ("This browser or app may not be secure"). Our solution:
+1. Use your real Chrome browser for authentication
+2. Capture the auth state
+3. Inject it into Playwright tests
+
+### First-Time Setup
+
+```bash
+# Terminal 1: Start dev server
+make dev
+
+# Terminal 2: Open Chrome with remote debugging
+make e2e-chrome
+
+# In Chrome: Click "Sign in with Google" and complete authentication
+
+# Terminal 3: Capture auth state
+make e2e-capture
+```
+
+### Running Tests
+
+Once auth is captured, run tests anytime:
+
+```bash
+make e2e
+```
+
+### When Auth Expires
+
+If tests fail with redirects to login, re-capture:
+
+```bash
+make e2e-chrome    # Sign in again
+make e2e-capture   # Re-capture auth
+make e2e           # Run tests
+```
+
+### Test Structure
+
+| File | Description |
+|------|-------------|
+| `e2e/auth.spec.ts` | Authenticated user flows (dashboard, sign out) |
+| `e2e/navigation.spec.ts` | Navigation and routing |
+| `e2e/unauthenticated.spec.ts` | Login page, redirects, OAuth popup |
 
 ## Firebase Configuration
 

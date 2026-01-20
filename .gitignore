@@ -214,3 +214,6 @@ frontend/node_modules/
 !frontend/*.json
 frontend/coverage/
 .beads/
+
+playwright/.auth/
+.playwright-mcp/

@@ -52,6 +52,42 @@ frontend/src/
 
 ---
 
+## Next Up (v0.3.0) - Playwright E2E Testing with SSO
+
+### Goal
+Set up Playwright for E2E testing using real Google SSO with manual auth state capture.
+
+**Spec:** [`specs/playwright-sso-testing.md`](specs/playwright-sso-testing.md)
+
+### Tasks
+
+- [ ] **Install and configure Playwright** - Test runner, browser config
+- [ ] **Auth capture script** - `make e2e-auth` for manual Google sign-in
+- [ ] **Test fixtures** - Auth state checking, unauthenticated test support
+- [ ] **E2E test suite** - 9 tests covering auth flows and navigation
+- [ ] **Makefile targets** - `make e2e`, `make e2e-auth`, `make e2e-ui`
+
+---
+
+## Up Next (v0.4.0) - G Suite API Access
+
+### Goal
+Extend Google OAuth to request Sheets and Calendar permissions, enabling the app to access user's G Suite data.
+
+**Spec:** [`specs/gsuite-access.md`](specs/gsuite-access.md)
+
+**Depends on:** v0.3.0 (Playwright E2E testing)
+
+### Tasks
+
+- [ ] **Extend GoogleAuthProvider with G Suite scopes** - Request Sheets and Calendar permissions
+- [ ] **Token management library** - Store/refresh OAuth access tokens (`lib/google-api.ts`)
+- [ ] **Scope validation utilities** - Check granted vs requested scopes
+- [ ] **Unit tests for token logic** - Full coverage of non-UI code
+- [ ] **E2E tests for scope consent** - Verify scope request flow
+
+---
+
 ## Future Enhancements
 
 ### High Priority
