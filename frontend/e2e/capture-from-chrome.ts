@@ -82,13 +82,18 @@ async function readIndexedDBViaCDP(
       pageSize: 100,
     });
 
-    // Parse the entries
-    const entries: IndexedDBEntry[] = objectStoreDataEntries.map(
-      (entry: { key: { value: string }; value: { value: string } }) => ({
-        key: JSON.parse(entry.key.value) as unknown,
-        value: JSON.parse(entry.value.value) as unknown,
-      })
-    );
+    // Parse the entries - cast to expected shape since CDP types are too loose
+    const entries: IndexedDBEntry[] = (
+      objectStoreDataEntries as Array<{
+        key: { value?: string };
+        value: { value?: string };
+      }>
+    )
+      .filter((entry) => entry.key.value && entry.value.value)
+      .map((entry) => ({
+        key: JSON.parse(entry.key.value!) as unknown,
+        value: JSON.parse(entry.value.value!) as unknown,
+      }));
 
     return entries;
   } catch (error) {

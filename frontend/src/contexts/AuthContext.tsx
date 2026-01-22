@@ -14,7 +14,7 @@ import {
   getStoredToken,
   clearStoredToken,
   type GrantedScopes,
-} from '@/lib/google-api';
+} from '@/lib/google-auth';
 
 interface AuthContextType {
   user: User | null;

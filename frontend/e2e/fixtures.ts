@@ -159,7 +159,7 @@ export const test = base.extend<{
       // Inject the auth restoration script before any page loads
       await page.addInitScript(generateAuthInjectionScript(authData));
 
-      await use();
+      await use(undefined);
     },
     { auto: true },
   ],
