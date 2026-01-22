@@ -17,6 +17,7 @@ interface FirebaseAuthData {
     error: string | null;
   };
   localStorage: Record<string, string>;
+  sessionStorage?: Record<string, string>; // Google OAuth access token for APIs
   capturedAt: string;
   capturedFrom: string;
 }
@@ -44,13 +45,23 @@ function loadFirebaseAuth(): FirebaseAuthData | null {
 function generateAuthInjectionScript(authData: FirebaseAuthData): string {
   const entries = authData.indexedDB.entries;
   const localStorageData = authData.localStorage;
+  const sessionStorageData = authData.sessionStorage ?? {};
 
   return `
     (async () => {
-      // Restore localStorage
+      // Restore localStorage (Firebase auth)
       const localStorageData = ${JSON.stringify(localStorageData)};
       for (const [key, value] of Object.entries(localStorageData)) {
         localStorage.setItem(key, value);
+      }
+
+      // Restore sessionStorage (Google OAuth access token for Sheets/Calendar APIs)
+      const sessionStorageData = ${JSON.stringify(sessionStorageData)};
+      for (const [key, value] of Object.entries(sessionStorageData)) {
+        sessionStorage.setItem(key, value);
+      }
+      if (Object.keys(sessionStorageData).length > 0) {
+        console.log('[E2E] Google OAuth token restored from sessionStorage');
       }
 
       // Restore IndexedDB (Firebase auth)

@@ -122,6 +122,32 @@ async function readLocalStorageViaCDP(
   }
 }
 
+/**
+ * Read sessionStorage using CDP
+ * This captures the Google OAuth access token needed for Sheets/Calendar APIs
+ */
+async function readSessionStorageViaCDP(
+  cdp: CDPSession
+): Promise<Record<string, string>> {
+  try {
+    const { entries } = await cdp.send('DOMStorage.getDOMStorageItems', {
+      storageId: {
+        securityOrigin: 'http://localhost:5173',
+        isLocalStorage: false, // false = sessionStorage
+      },
+    });
+
+    const data: Record<string, string> = {};
+    for (const [key, value] of entries) {
+      data[key] = value;
+    }
+    return data;
+  } catch (error) {
+    console.error('   CDP sessionStorage error:', (error as Error).message);
+    return {};
+  }
+}
+
 async function captureAuthState() {
   console.log('\n');
   console.log(
@@ -196,6 +222,10 @@ async function captureAuthState() {
     console.log('   Reading localStorage...');
     const localStorageData = await readLocalStorageViaCDP(cdp);
 
+    // Read sessionStorage (for Google OAuth access token)
+    console.log('   Reading sessionStorage...');
+    const sessionStorageData = await readSessionStorageViaCDP(cdp);
+
     // Save Firebase auth data
     const authData = {
       indexedDB: {
@@ -206,6 +236,7 @@ async function captureAuthState() {
         error: null,
       },
       localStorage: localStorageData,
+      sessionStorage: sessionStorageData,
       capturedAt: new Date().toISOString(),
       capturedFrom: currentUrl,
     };

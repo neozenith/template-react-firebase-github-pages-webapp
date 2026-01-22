@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
-  GoogleAuthProvider,
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
+import { createGoogleProvider } from './google-auth-config';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,6 +27,7 @@ setPersistence(auth, browserLocalPersistence).catch((error: unknown) => {
   console.error('Error setting persistence:', error);
 });
 
-export const googleProvider = new GoogleAuthProvider();
+// Create Google provider with Sheets, Calendar, and Drive scopes
+export const googleProvider = createGoogleProvider();
 
 export default app;
