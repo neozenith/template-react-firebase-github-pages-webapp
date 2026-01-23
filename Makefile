@@ -35,36 +35,19 @@ dev:
 build:
 	npm --prefix frontend run build
 
-preview:
-	npm --prefix frontend run preview
-
-clean:
-	rm -rf frontend/node_modules
-	rm -rf frontend/dist
-	rm -rf frontend/coverage
-
-test:
-	npm --prefix frontend run test
-
-test-watch:
-	npm --prefix frontend run test:watch
-
-test-coverage:
-	npm --prefix frontend run test:coverage
-
-check:
-	npm --prefix frontend run check
-
 format:
 	npm --prefix frontend run format
 
-lint:
+lint: format
 	npm --prefix frontend run lint
 
 typecheck:
 	npm --prefix frontend run typecheck
 
-ci: format check lint test-coverage
+test: lint typecheck
+	npm --prefix frontend run test
+
+ci: format lint typecheck test build
 
 e2e:
 	npm --prefix frontend run e2e
@@ -91,11 +74,6 @@ e2e-capture:
 	@echo "Capturing auth state from Chrome..."
 	npm --prefix frontend run e2e:capture
 
-e2e-auth:
-	@echo "Opening Playwright browser for manual Google sign-in..."
-	@echo "(Note: Google may block this - use 'make e2e-chrome' + 'make e2e-capture' instead)"
-	npm --prefix frontend run e2e:auth
-
 e2e-ui:
 	npm --prefix frontend run e2e:ui
 
@@ -104,3 +82,9 @@ e2e-headed:
 
 e2e-debug:
 	npm --prefix frontend run e2e:debug
+
+
+clean:
+	rm -rf frontend/node_modules
+	rm -rf frontend/dist
+	rm -rf frontend/coverage

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 import { useGoogleCalendars } from '@/hooks/useGoogleCalendars';
@@ -10,6 +11,49 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+
+/**
+ * Profile avatar with fallback to initials when image fails to load
+ * (e.g., due to rate limiting from Google's CDN)
+ */
+function ProfileAvatar({
+  photoURL,
+  displayName,
+}: {
+  photoURL?: string | null;
+  displayName?: string | null;
+}) {
+  const [imageError, setImageError] = useState(false);
+
+  // Generate initials from display name
+  const initials =
+    displayName
+      ?.split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) ?? '?';
+
+  if (!photoURL || imageError) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+        <span className="text-sm font-medium text-primary">{initials}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={photoURL}
+      alt="Profile"
+      className="w-10 h-10 rounded-full"
+      onError={() => {
+        setImageError(true);
+      }}
+      referrerPolicy="no-referrer"
+    />
+  );
+}
 
 /**
  * Map MIME types to friendly names and colors
@@ -325,13 +369,10 @@ export const DashboardPage = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {user?.photoURL && (
-              <img
-                src={user.photoURL}
-                alt="Profile"
-                className="w-10 h-10 rounded-full"
-              />
-            )}
+            <ProfileAvatar
+              photoURL={user?.photoURL}
+              displayName={user?.displayName}
+            />
             <div>
               <h1 className="text-xl font-bold">{user?.displayName}</h1>
               <p className="text-xs text-muted-foreground">{user?.email}</p>

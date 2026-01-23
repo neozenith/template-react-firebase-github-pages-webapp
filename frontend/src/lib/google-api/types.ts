@@ -30,7 +30,12 @@ export class GoogleApiError extends Error {
   /** Original response body for debugging */
   readonly responseBody?: string;
 
-  constructor(status: number, message: string, apiType?: ApiType, responseBody?: string) {
+  constructor(
+    status: number,
+    message: string,
+    apiType?: ApiType,
+    responseBody?: string
+  ) {
     super(message);
     this.name = 'GoogleApiError';
     this.status = status;
@@ -38,10 +43,12 @@ export class GoogleApiError extends Error {
     this.responseBody = responseBody;
     // Maintains proper stack trace for where error was thrown (V8 engines)
     if ('captureStackTrace' in Error) {
-      (Error.captureStackTrace as (target: object, constructor?: NewableFunction) => void)(
-        this,
-        GoogleApiError
-      );
+      (
+        Error.captureStackTrace as (
+          target: object,
+          constructor?: NewableFunction
+        ) => void
+      )(this, GoogleApiError);
     }
   }
 }

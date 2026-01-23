@@ -83,16 +83,22 @@ async function readIndexedDBViaCDP(
     });
 
     // Parse the entries - cast to expected shape since CDP types are too loose
+    // Filter guarantees .value exists, but TS can't narrow through .filter()
     const entries: IndexedDBEntry[] = (
-      objectStoreDataEntries as Array<{
+      objectStoreDataEntries as {
         key: { value?: string };
         value: { value?: string };
-      }>
+      }[]
     )
-      .filter((entry) => entry.key.value && entry.value.value)
+      .filter(
+        (
+          entry
+        ): entry is { key: { value: string }; value: { value: string } } =>
+          entry.key.value !== undefined && entry.value.value !== undefined
+      )
       .map((entry) => ({
-        key: JSON.parse(entry.key.value!) as unknown,
-        value: JSON.parse(entry.value.value!) as unknown,
+        key: JSON.parse(entry.key.value) as unknown,
+        value: JSON.parse(entry.value.value) as unknown,
       }));
 
     return entries;

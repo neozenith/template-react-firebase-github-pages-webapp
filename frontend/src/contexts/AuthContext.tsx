@@ -27,6 +27,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components -- Standard React pattern: useAuth hook must be co-located with AuthProvider
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
